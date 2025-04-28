@@ -1,0 +1,31 @@
+receivers:
+  otlp:
+    protocols:      
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+exporters:
+  otlphttp:
+    endpoint: "https://logfire-api.pydantic.dev:443"
+    headers:
+      authorization: "YOUR_LOGFIRE_WRITE_TOKEN"
+
+processors:
+  batch:    
+
+service:
+  pipelines:
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp]
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp]
